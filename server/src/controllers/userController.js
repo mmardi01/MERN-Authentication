@@ -15,7 +15,7 @@ const authUser = asyncHandler(async (req, res) => {
     throw new Error('user not found');
   }
   
-  const compare = await bcrypt.compare(user.password, password);
+  const compare = await bcrypt.compare( password, user.password);
   
   if (!compare) {
     res.status(401);
@@ -23,8 +23,14 @@ const authUser = asyncHandler(async (req, res) => {
   }
   
   if (user) {
-    const token = generateAccessToken(user.username,user.email);
+    const token = generateAccessToken(user._id, user.username,user.email);
     res.status(201);
+    res.cookie('jwt',token,{
+      httpOnly: true,
+      secure:process.env.NODE_ENV !== 'development',
+      sameSite: 'strict',
+      message: 30 * 24 * 60 * 60 * 1000
+    })
     res.json({
       _id:user.id,
       username:user.username,
@@ -65,7 +71,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('error while creating user')
   }
   
-  const token = generateAccessToken(user.username,user.email);
+  const token = generateAccessToken(user._id ,user.username,user.email);
   res.status(200);
   res.cookie('jwt',token,{
     httpOnly:true,
@@ -93,9 +99,8 @@ const logoutUser = asyncHandler(async (req, res) => {
 // route GET /api/users/profile
 // @access Private
 const getUserProfile = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: 'User profile',
-  });
+  res.send(200);
+  res.json(req.user);
 });
 
 // @desc Update user profile
