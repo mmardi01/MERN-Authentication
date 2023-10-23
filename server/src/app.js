@@ -10,6 +10,7 @@ const app = express();
 connectDb();
 
 
+app.use(express.json());
 app.use('/api/users',userRouter);
 app.use(notFound);
 app.use(errorHandler);

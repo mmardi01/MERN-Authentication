@@ -1,4 +1,6 @@
 import asyncHandler from 'express-async-handler' 
+import { User } from '../models/userModel.js';
+import { error } from 'console';
 
 // @desc Auth user/set token
 // route POST /api/users/auth
@@ -13,9 +15,32 @@ const authUser = asyncHandler(async (req,res) => {
 // route POST /api/users
 // @access Public
 const registerUser = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: 'Register User!',
-  });
+  const { username, email, password } = req.body;
+  const findUserEmail = await User.findOne({email});
+  const findUserName = await User.findOne({username});
+  
+  if (findUserName) {
+    res.status(400);
+    throw new Error('username already in use.');
+  }
+  
+  if (findUserEmail) {
+    res.status(400);
+    throw new Error('email already in use.');
+  }
+  try {
+      const user = new User({
+      username,
+      email,
+      password,
+    });
+    const userData = await user.save();
+    res.status(200).json(userData);
+  }
+  catch(err) {
+    res.status(400);
+    throw new Error('error while creating user')
+  }
 });
 
 // @desc Logout a user
