@@ -29,7 +29,7 @@ const authUser = asyncHandler(async (req, res) => {
       httpOnly: true,
       secure:process.env.NODE_ENV !== 'development',
       sameSite: 'strict',
-      message: 30 * 24 * 60 * 60 * 1000
+      maxAge: 30 * 24 * 60 * 60 * 1000
     })
     res.json({
       _id:user.id,
@@ -90,26 +90,60 @@ const registerUser = asyncHandler(async (req, res) => {
 // route POST /api/users/logout
 // @access Public
 const logoutUser = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: 'User Loged out',
+
+  res.cookie('jwt', '',{
+    expires:  new Date(0)
   });
+  res.status(200);
+  res.send('user logged out successfully');
 });
 
 // @desc Get user profile
 // route GET /api/users/profile
 // @access Private
 const getUserProfile = asyncHandler(async (req, res) => {
-  res.send(200);
-  res.json(req.user);
+  
+  const user = {
+    _id: req.user._id,
+    username: req.user.username,
+    email: req.user.email,
+  };
+
+  res.status(201);
+  res.json(user);
 });
 
 // @desc Update user profile
 // route PUT /api/users/profile
 // @access Private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    message: 'Update user profile',
-  });
+  const user = await User.findOne({_id:req.user._id});
+  if (user) {
+    user.username = req.body.username || user.username;
+    user.email = req.body.email || user.email;
+
+    if (req.body.password)
+      user.password = req.body.password;
+
+    try {
+
+      const updatedUser = await user.save();
+      res.status(200);
+      res.json({
+        _id: updatedUser._id,
+        username: updatedUser.username,
+        email: updatedUser.email
+      })
+    }
+    catch(err) {
+      res.status(400);
+      throw new Error('Failed to update profile.');
+    }
+  }
+  else {
+    res.status(400);
+    throw new Error('Failed to update profile.');
+  }
 });
 
 export {

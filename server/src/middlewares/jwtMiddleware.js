@@ -9,7 +9,7 @@ const jwtGuard = expressAsyncHandler(async (req, res, next) => {
   if (token) {
     try {
       const decode = jwt.verify(token,process.env.TOKEN_SECRET);
-      req.user = await User.find({_id:decode.id}).select('-password');
+      req.user = await User.findOne({_id:decode.id}).select('-password');
       next();
     }
     catch(err) {
