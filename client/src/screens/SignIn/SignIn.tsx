@@ -1,5 +1,6 @@
 import React from 'react'
 import './SignIn.css'
+import { ReactSVG } from 'react-svg'
 
 export const SignIn = () => {
 
@@ -17,6 +18,16 @@ export const SignIn = () => {
         <div className='line'></div>
         <p>or continue with</p>
         <div className='line'></div>
+      </div>
+      <div className='g-f-buttons'>
+        <button className='g-f-login'>
+          <ReactSVG src='googleIcon.svg' />
+          Log in
+        </button>
+        <button className='g-f-login'>
+          <ReactSVG src='facebookIcon.svg' />
+          Log in
+        </button>
       </div>
     </div>
   )
