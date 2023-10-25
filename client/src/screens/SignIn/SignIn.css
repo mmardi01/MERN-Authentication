@@ -22,7 +22,7 @@
   background-color: #2B2B2B;
   border: none;
   height: 45px;
-  margin: 10px 0;
+  margin: 8px 0;
   border-radius: 8px;
   font-weight: 700;
   font-size: 12px;
@@ -92,9 +92,10 @@
   margin-top: auto;
   color: #525252;
   font-weight: 600;
+  font-size: 12px;
 }
 
-.signup-link span {
+.s-l {
   color: white;
   font-weight: bold;
 }

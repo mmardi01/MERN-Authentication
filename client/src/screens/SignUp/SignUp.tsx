@@ -1,16 +1,19 @@
-import React, {FormEvent, useState} from "react";
-import "./SignIn.css";
-import { ReactSVG } from "react-svg";
-import { Link } from "react-router-dom";
-interface LoginInputs {
+import React, { FormEvent, useState } from 'react'
+import { ReactSVG } from 'react-svg'
+import { Link } from 'react-router-dom';
+
+interface SignUpInputs {
   username:string;
+  email:string;
   password:string;
 }
 
-export const SignIn = () => {
 
-  const [inputs, setInputs] = useState<LoginInputs>({
+const SignUp = () => {
+
+  const [inputs, setInputs] = useState<SignUpInputs>({
     username:'',
+    email:'',
     password:''
   })
 
@@ -30,15 +33,20 @@ export const SignIn = () => {
           placeholder="Username" 
           type="text" 
           />
+          <input 
+          value={inputs.username}
+          onChange={(e) => setInputs({...inputs, email: e.target.value})}
+          placeholder="Email" 
+          type="email" 
+          />
         <input
           value={inputs.password}
           onChange={(e) => setInputs({...inputs, password: e.target.value})}
           placeholder="Password" 
           type="password" 
         />
-        <p className="forgot">Forgot your password?</p>
         <button type="submit" className="login-button">
-          Log in
+          Sign up
         </button>
       </form>
       <div className="devider">
@@ -49,16 +57,18 @@ export const SignIn = () => {
       <div className="g-f-buttons">
         <button className="g-f-login">
           <ReactSVG src="googleIcon.svg" />
-          Log in
+          Sign up
         </button>
         <button className="g-f-login">
           <ReactSVG src="facebookIcon.svg" />
-          Log in
+          Sign Up
         </button>
       </div>
       <p className="signup-link">
-        Don't have an account? <Link className="s-l" to='/signup' >Sign up</Link> 
+        Already have an account? <Link className="s-l" to='/' >Sign in</Link> 
       </p>
     </div>
-  );
-};
+  )
+}
+
+export default SignUp
