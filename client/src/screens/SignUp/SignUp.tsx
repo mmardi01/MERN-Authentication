@@ -1,6 +1,8 @@
 import React, { FormEvent, useState } from 'react'
 import { ReactSVG } from 'react-svg'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 interface SignUpInputs {
   username:string;
@@ -17,8 +19,21 @@ const SignUp = () => {
     password:''
   })
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      await axios.post('/api/users',inputs, {
+        withCredentials: true
+      }
+      );
+      navigate('/');
+    }
+    catch(e) {
+      
+    }
   }
 
   return (
@@ -34,7 +49,7 @@ const SignUp = () => {
           type="text" 
           />
           <input 
-          value={inputs.username}
+          value={inputs.email}
           onChange={(e) => setInputs({...inputs, email: e.target.value})}
           placeholder="Email" 
           type="email" 

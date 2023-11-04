@@ -44,22 +44,20 @@ const authUser = asyncHandler(async (req, res) => {
 // route POST /api/users
 // @access Public
 const registerUser = asyncHandler(async (req, res) => {
-
   const { username, email, password } = req.body;
-  console.log(req.headers);
   const findUserEmail = await User.findOne({ email });
   const findUserName = await User.findOne({ username });
-
+  
   if (findUserName) {
     res.status(400);
     throw new Error('username already in use.');
   }
-
+  
   if (findUserEmail) {
     res.status(400);
     throw new Error('email already in use.');
   }
-
+  
   const user = await User.create({
     username,
     email,

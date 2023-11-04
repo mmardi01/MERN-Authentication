@@ -3,7 +3,7 @@ import { authUser,getUserProfile,registerUser,logoutUser,updateUserProfile } fro
 import { jwtGuard } from '../middlewares/jwtMiddleware.js';
 const router = express.Router();
 
-router.post('/',registerUser)
+router.post('/', registerUser);
 router.post('/auth',authUser);
 router.post('/logout',logoutUser);
 router.route('/profile')

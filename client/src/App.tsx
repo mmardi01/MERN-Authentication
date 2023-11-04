@@ -1,15 +1,15 @@
 import React from 'react';
 import './App.css';
-import { SignIn } from './screens/SignIn/SignIn';
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider,Outlet} from 'react-router-dom'
 import SignUp from './screens/SignUp/SignUp';
-
+import Home from './screens/Home/Home';
+import ReduxProvider from './provider';
 function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Root/>}>
-        <Route index element={<SignIn />} />
+        <Route index element={<Home />} />
         <Route path='/signup' element={<SignUp />} />
       </Route>
     )
@@ -24,7 +24,9 @@ function App() {
 
 const Root = () => {
   return (
-    <Outlet />
+    <ReduxProvider>
+      <Outlet />
+    </ReduxProvider>
   )
 }
 

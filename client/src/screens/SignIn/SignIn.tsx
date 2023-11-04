@@ -1,7 +1,9 @@
 import React, {FormEvent, useState} from "react";
 import "./SignIn.css";
 import { ReactSVG } from "react-svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 interface LoginInputs {
   username:string;
   password:string;
@@ -14,8 +16,20 @@ export const SignIn = () => {
     password:''
   })
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      const res = await axios.post('/api/users/auth',inputs, {
+        withCredentials: true
+      }
+      );
+      navigate('/');
+    }
+    catch(e) {
+      
+    }
   }
 
   return (

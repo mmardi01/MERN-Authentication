@@ -99,3 +99,7 @@
   color: white;
   font-weight: bold;
 }
+
+.login-button:hover {
+  background-color: #e5e1e1;
+}
