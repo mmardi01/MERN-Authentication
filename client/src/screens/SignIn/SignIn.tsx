@@ -3,6 +3,8 @@ import "./SignIn.css";
 import { ReactSVG } from "react-svg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAppDispatch } from "../../redux/hooks";
+import { setCredentials } from "../../redux/authSlice";
 
 interface LoginInputs {
   username:string;
@@ -16,19 +18,25 @@ export const SignIn = () => {
     password:''
   })
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useAppDispatch();
+
   const navigate = useNavigate();
   
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      await axios.post('/api/users/auth',inputs, {
+      const res = await axios.post('/api/users/auth',inputs, {
         withCredentials: true
-      }
-      );
+      });
+      setIsLoading(false);
+      dispatch(setCredentials(res.data));
       navigate('/');
     }
     catch(e) {
-      
+      setIsLoading(false);
     }
   }
 
@@ -51,9 +59,16 @@ export const SignIn = () => {
           type="password" 
         />
         <p className="forgot">Forgot your password?</p>
-        <button type="submit" className="login-button">
+        {
+          isLoading ?
+          <button disabled type="submit" className="login-button">
+          Loading
+        </button>
+          :
+          <button type="submit" className="login-button">
           Log in
         </button>
+        }
       </form>
       <div className="devider">
         <div className="line"></div>

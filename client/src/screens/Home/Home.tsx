@@ -1,23 +1,33 @@
-import axios from 'axios'
-import React, { useEffect } from 'react'
-import { setCredentials } from '../../redux/authSlice';
-import { useAppDispatch } from '../../redux/hooks';
-import { useNavigate } from 'react-router-dom';
+import React,{useEffect,useState} from 'react'
+import './Home.css'
+import axios from 'axios';
+interface UserInfo {
+  _id: string;
+  username: string;
+  email: string;
+}
 
 const Home = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+ 
+  const [userInfo, setUserInfo] = useState<UserInfo>();
 
-  useEffect(() => {
-    axios.get('/api/users/profile').then(res => {
-      dispatch(setCredentials(res.data));
-    }).catch((err) => {
-      navigate('/signin')
-    })
-  }, [dispatch,navigate]);
-  
+  const checkUserInfo = async () => {
+
+    const useInfo = window.localStorage.getItem('userInfo');
+    if (useInfo)
+      setUserInfo(JSON.parse(useInfo));
+    else
+      await  axios.post('/api/logout');
+  }
+
+  useEffect(()=> {
+    checkUserInfo();
+  }, [])
+
   return (
-    <div>Home Page</div> 
+    <div className='home-page'>
+      <h1>Welcome {userInfo?.username} !</h1>
+    </div> 
   )
 }
 

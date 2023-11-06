@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
-import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider,Outlet} from 'react-router-dom'
+import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider,Outlet, useNavigate} from 'react-router-dom'
 import SignUp from './screens/SignUp/SignUp';
 import { SignIn } from './screens/SignIn/SignIn';
 import Home from './screens/Home/Home';
 import ReduxProvider from './provider';
+import authSlice, {removeCredentials, setCredentials} from './redux/authSlice';
+import { useAppDispatch } from './redux/hooks';
+import axios from 'axios';
 
 function App() {
 
@@ -19,17 +22,29 @@ function App() {
   )
 
   return (
+  <ReduxProvider>
     <div className="App">
       <RouterProvider router={router} />
     </div>
+  </ReduxProvider>
   );
 }
 
 const Root = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get('/api/users/profile').then(res => {
+      dispatch(setCredentials(res.data));
+    }).catch((err) => {
+      dispatch(removeCredentials())
+      navigate('/signin')
+    })
+  }, [dispatch,navigate]);
+
   return (
-    <ReduxProvider>
       <Outlet />
-    </ReduxProvider>
   )
 }
 

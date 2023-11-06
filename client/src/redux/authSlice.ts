@@ -17,8 +17,7 @@ export const authSlise  = createSlice({
       state = action.payload;
       localStorage.setItem('userInfo',JSON.stringify(action.payload));
     },
-    removeCredentials: (state, action) => {
-      state = null;
+    removeCredentials: () => {
       localStorage.removeItem('userInfo')
     }
   }
