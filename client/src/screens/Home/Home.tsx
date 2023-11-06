@@ -1,23 +1,23 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { setCredentials } from '../../redux/authSlice';
-import { SignIn } from '../SignIn/SignIn';
 import { useAppDispatch } from '../../redux/hooks';
+import { useNavigate } from 'react-router-dom';
+
 const Home = () => {
   const dispatch = useAppDispatch();
-  const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     axios.get('/api/users/profile').then(res => {
-      setLoggedIn(true);
       dispatch(setCredentials(res.data));
     }).catch((err) => {
-      console.log(err);
+      navigate('/signin')
     })
-  }, [])
+  }, [dispatch,navigate]);
+  
   return (
-    <>{
-      !loggedIn ? <SignIn /> : <div>hello</div> 
-    }</>
+    <div>Home Page</div> 
   )
 }
 

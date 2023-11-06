@@ -3,36 +3,43 @@ import { ReactSVG } from 'react-svg'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
 interface SignUpInputs {
   username:string;
   email:string;
   password:string;
+  confirmPassword:string;
 }
-
 
 const SignUp = () => {
 
   const [inputs, setInputs] = useState<SignUpInputs>({
     username:'',
     email:'',
-    password:''
+    password:'',
+    confirmPassword:''
   })
 
+  const [isLoading,setIsLoading] = useState(false);
   
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    
     e.preventDefault();
+    if (!inputs.password || inputs.password !== inputs.confirmPassword)
+      return;
+    setIsLoading(true);
     try {
       await axios.post('/api/users',inputs, {
         withCredentials: true
       }
       );
+      setIsLoading(false);
       navigate('/');
     }
-    catch(e) {
-      
+    catch(e: any) { 
+      console.log(e.response.data.message);
+      setIsLoading(false);
     }
   }
 
@@ -60,9 +67,22 @@ const SignUp = () => {
           placeholder="Password" 
           type="password" 
         />
-        <button type="submit" className="login-button">
+        <input
+          value={inputs.confirmPassword}
+          onChange={(e) => setInputs({...inputs, confirmPassword: e.target.value})}
+          placeholder="Confirm Password" 
+          type="password" 
+        />
+        {
+          !isLoading ?
+          <button type="submit" className="login-button">
           Sign up
         </button>
+        :
+        <button disabled  className="login-button">
+          Loading...
+        </button>
+        }
       </form>
       <div className="devider">
         <div className="line"></div>

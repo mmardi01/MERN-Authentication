@@ -21,7 +21,7 @@ export const SignIn = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/users/auth',inputs, {
+      await axios.post('/api/users/auth',inputs, {
         withCredentials: true
       }
       );

@@ -13,7 +13,7 @@ export const authSlise  = createSlice({
   name:'auth',
   initialState,
   reducers: {
-    setCredentials: (state,action) => {
+    setCredentials: (state, action) => {
       state = action.payload;
       localStorage.setItem('userInfo',JSON.stringify(action.payload));
     },
