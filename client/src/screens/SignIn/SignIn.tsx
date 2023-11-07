@@ -17,7 +17,8 @@ export const SignIn = () => {
     username:'',
     password:''
   })
-
+  const [ userNameError, setUsernameError ] = useState('');
+  const [ passwordError, setPasswordError ] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ export const SignIn = () => {
   const navigate = useNavigate();
   
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    setUsernameError('');
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -35,7 +37,12 @@ export const SignIn = () => {
       dispatch(setCredentials(res.data));
       navigate('/');
     }
-    catch(e) {
+    catch(e: any) {
+      console.log(e.response.data.message);
+      if (e.response.data.message === 'user not found')
+        setUsernameError('User not found');
+      else if (e.response.data.message === 'Incorrect password!')
+        setPasswordError('Incorrect password')
       setIsLoading(false);
     }
   }
@@ -52,12 +59,18 @@ export const SignIn = () => {
           placeholder="Username" 
           type="text" 
           />
+          {
+            userNameError ? <p className="error">Username not found</p> : null
+          }
         <input
           value={inputs.password}
           onChange={(e) => setInputs({...inputs, password: e.target.value})}
           placeholder="Password" 
           type="password" 
         />
+         {
+            passwordError ? <p className="error">Incorrect password</p> : null
+          }
         <p className="forgot">Forgot your password?</p>
         {
           isLoading ?

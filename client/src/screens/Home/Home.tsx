@@ -16,9 +16,15 @@ const Home = () => {
     const useInfo = window.localStorage.getItem('userInfo');
     if (useInfo)
       setUserInfo(JSON.parse(useInfo));
-    else
-      await  axios.post('/api/logout');
-  }
+    else {
+      try {
+        await  axios.post('/api/logout');
+      }
+      catch {
+        
+      }
+    }
+}
 
   useEffect(()=> {
     checkUserInfo();

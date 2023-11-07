@@ -100,7 +100,7 @@ const SignUp = () => {
         </button>
       </div>
       <p className="signup-link">
-        Already have an account? <Link className="s-l" to='/' >Sign in</Link> 
+        Already have an account? <Link className="s-l" to='/signin' >Sign in</Link> 
       </p>
     </div>
   )

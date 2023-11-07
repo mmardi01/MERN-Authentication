@@ -103,3 +103,8 @@
 .login-button:hover {
   background-color: #e5e1e1;
 }
+
+.error {
+  color: red;
+  font-weight: 50;
+}
