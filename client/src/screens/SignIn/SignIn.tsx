@@ -27,6 +27,7 @@ export const SignIn = () => {
   
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setUsernameError('');
+    setPasswordError('');
     e.preventDefault();
     setIsLoading(true);
     try {
