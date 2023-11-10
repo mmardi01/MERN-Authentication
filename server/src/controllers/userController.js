@@ -44,6 +44,7 @@ const authUser = asyncHandler(async (req, res) => {
 // route POST /api/users
 // @access Public
 const registerUser = asyncHandler(async (req, res) => {
+  
   const { username, email, password } = req.body;
   const findUserEmail = await User.findOne({ email });
   const findUserName = await User.findOne({ username });
@@ -69,13 +70,14 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('error while creating user')
   }
   
-  const token = generateAccessToken(user._id ,user.username,user.email);
+  const token = generateAccessToken(user._id ,user.username, user.email);
   res.status(200);
   res.cookie('jwt',token,{
     httpOnly:true,
     secure: process.env.NODE_ENV !== 'development',
     maxAge:30 * 24 * 60 * 60 * 1000,
-  })
+  });
+
   res.json({
     _id: user._id,
     username: user.username,

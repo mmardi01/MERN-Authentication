@@ -19,6 +19,7 @@ const SignUp = () => {
     confirmPassword:''
   })
 
+
   const [isLoading,setIsLoading] = useState(false);
   
   const navigate = useNavigate();
