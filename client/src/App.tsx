@@ -5,7 +5,7 @@ import SignUp from './screens/SignUp/SignUp';
 import { SignIn } from './screens/SignIn/SignIn';
 import Home from './screens/Home/Home';
 import ReduxProvider from './provider';
-import authSlice, {removeCredentials, setCredentials} from './redux/authSlice';
+import {removeCredentials, setCredentials} from './redux/authSlice';
 import { useAppDispatch } from './redux/hooks';
 import axios from 'axios';
 
@@ -36,7 +36,7 @@ const Root = () => {
 
   useEffect(() => {
     axios.get('/api/users/profile').then(res => {
-      dispatch(setCredentials(res.data));
+      dispatch(setCredentials(res.data)); 
     }).catch((err) => {
       dispatch(removeCredentials())
       navigate('/signin')
