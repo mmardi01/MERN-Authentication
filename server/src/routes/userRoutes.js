@@ -9,10 +9,10 @@ router.post('/auth',[
   check('username').notEmpty(),
   check('password').notEmpty(),
   (req, res,next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.log(`Invalid ${errors[0].path}`);
-      // throw new Error(`Invalid ${errors[0].path}`)
+    const {errors} = validationResult(req);
+    if (errors.length) {
+      const errorPath = errors[0].path
+      throw new Error(`Invalid ${errorPath}`);
     }
     next();
   }

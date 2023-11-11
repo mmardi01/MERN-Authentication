@@ -5,8 +5,7 @@ const connectionString = process.env.MONGO_URI
 
 const connectDb = async () => {
     try {   
-        console.log('im here');
-        await mongoose.connect('mongodb://localhost:27017');
+        await mongoose.connect(connectionString);
         console.log(`Db connected seccussfully`);
     }
     catch (err) {
