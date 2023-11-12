@@ -3,13 +3,16 @@ import {check, validationResult} from 'express-validator'
 
 const signInErrorHandler =  (req, res,next) => {
   const {errors} = validationResult(req);
-  console.log(req.body.username);
   if (errors.length) {
-    const errorPath = errors[0].path
-    res.status(400);
-    throw new Error(`Invalid ${errorPath}`);
+    let err = new Error()
+    err.statusCode = 400;
+    err.message = errors[0].msg;
+    next(err);
   }
-  next();
+  else{
+    next();
+  }
+  
 }
 
 const signUpErrorHandler = (req, res, next) => {
@@ -22,8 +25,8 @@ const signUpErrorHandler = (req, res, next) => {
 }
 
 const signInValidation = [
-  check('username').notEmpty().trim(),
-  check('password').notEmpty(),
+  check('username').notEmpty().withMessage('Username cannot be empty'),
+  check('password').notEmpty().withMessage('Password cannot be empty'),
   signInErrorHandler
 ];
 
