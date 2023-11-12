@@ -1,23 +1,11 @@
 import express from 'express'
 import { authUser,getUserProfile,registerUser,logoutUser,updateUserProfile } from "../controllers/userController.js";
 import { jwtGuard } from '../middlewares/jwtMiddleware.js';
-import {check, validationResult} from 'express-validator'
+import { signInValidation, signUpValidation } from '../middlewares/formValidation.js';
 const router = express.Router();
 
-router.post('/',  registerUser);
-router.post('/auth',[
-  check('username').notEmpty(),
-  check('password').notEmpty(),
-  (req, res,next) => {
-    const {errors} = validationResult(req);
-    if (errors.length) {
-      const errorPath = errors[0].path
-      throw new Error(`Invalid ${errorPath}`);
-    }
-    next();
-  }
-]
-,authUser);
+router.post('/', signUpValidation, registerUser);
+router.post('/auth', signInValidation, authUser);
 router.post('/logout',logoutUser);
 router.route('/profile')
 .get(jwtGuard,getUserProfile)

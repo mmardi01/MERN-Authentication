@@ -27,8 +27,6 @@ const SignUp = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     
     e.preventDefault();
-    if (!inputs.password || inputs.password !== inputs.confirmPassword)
-      return;
     setIsLoading(true);
     try {
       await axios.post('/api/users',inputs, {
@@ -60,7 +58,7 @@ const SignUp = () => {
           value={inputs.email}
           onChange={(e) => setInputs({...inputs, email: e.target.value})}
           placeholder="Email" 
-          type="email" 
+          type="text" 
           />
         <input
           value={inputs.password}
