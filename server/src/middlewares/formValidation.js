@@ -8,25 +8,28 @@ const signInErrorHandler =  (req, res,next) => {
     err.statusCode = 400;
     err.message = errors[0].msg;
     next(err);
+    return;
   }
-  else{
-    next();
-  }
-  
+  next();
 }
 
 const signUpErrorHandler = (req, res, next) => {
   const {errors} = validationResult(req);
   if (errors.length) {
-    const errorPath = errors[0].path;
-    throw new Error(`Invalid ${errorPath}`)
+    res.status(400);
+    res.json(errors[0]);
+    return ;
   }
   next()
 }
 
 const signInValidation = [
-  check('username').notEmpty().withMessage('Username cannot be empty'),
-  check('password').notEmpty().withMessage('Password cannot be empty'),
+  check('username')
+  .notEmpty()
+  .withMessage('Username cannot be empty'),
+  check('password')
+  .notEmpty()
+  .withMessage('Password cannot be empty'),
   signInErrorHandler
 ];
 
@@ -35,15 +38,21 @@ const signInValidation = [
 const signUpValidation = [
   check('username')
   .notEmpty()
+  .withMessage('username cannot be empty')
   .isAlphanumeric()
-  .trim(),
+  .withMessage('invalid  username')
+  .trim()
+  .isLength({
+    min:4
+  }).withMessage('username must have at least 4 charcters'),
   check('email')
   .isEmail()
+  .withMessage('invalid email')
   .notEmpty(),
   check('password')
   .isLength({
     min:8
-  }),
+  }).withMessage('password must have at least 8 characters'),
   signUpErrorHandler
 ]
 

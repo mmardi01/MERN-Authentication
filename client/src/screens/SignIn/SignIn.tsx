@@ -19,7 +19,7 @@ export const SignIn = () => {
   })
   const [ userNameError, setUsernameError ] = useState('');
   const [ passwordError, setPasswordError ] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading ] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -39,9 +39,12 @@ export const SignIn = () => {
       navigate('/');
     }
     catch(e: any) {
-      console.log(e.response.data.message);
       if (e.response.data.message === 'user not found')
         setUsernameError('User not found');
+      else if (e.response.data.message === 'Username cannot be empty')
+        setUsernameError('Username cannot be empty');
+      else if (e.response.data.message === 'Password cannot be empty')
+        setPasswordError('Password cannot be empty')
       else if (e.response.data.message === 'Incorrect password!')
         setPasswordError('Incorrect password')
       setIsLoading(false);
@@ -61,7 +64,7 @@ export const SignIn = () => {
           type="text" 
           />
           {
-            userNameError ? <p className="error">Username not found</p> : null
+            userNameError ? <p className="error">{userNameError}</p> : null
           }
         <input
           value={inputs.password}
@@ -70,7 +73,7 @@ export const SignIn = () => {
           type="password" 
         />
          {
-            passwordError ? <p className="error">Incorrect password</p> : null
+            passwordError ? <p className="error">{passwordError}</p> : null
           }
         <p className="forgot">Forgot your password?</p>
         {

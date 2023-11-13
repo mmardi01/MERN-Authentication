@@ -10,6 +10,11 @@ interface SignUpInputs {
   confirmPassword:string;
 }
 
+interface ValidationError {
+  path: string;
+  msg: string;
+}
+
 const SignUp = () => {
 
   const [inputs, setInputs] = useState<SignUpInputs>({
@@ -17,8 +22,11 @@ const SignUp = () => {
     email:'',
     password:'',
     confirmPassword:''
-  })
-
+  });
+  const [ usernameError, setUsernameError ] =  useState('');
+  const [ emailError, setEmailError ] =  useState('');
+  const [ passwordError, setPasswordError ] =  useState('');
+  const [ confirmPasswordError, setConfirmPasswordError ] =  useState('');
 
   const [isLoading,setIsLoading] = useState(false);
   
@@ -28,6 +36,12 @@ const SignUp = () => {
     
     e.preventDefault();
     setIsLoading(true);
+    setUsernameError('');
+    setEmailError('');
+    setPasswordError('')
+    if (inputs.password !== inputs.confirmPassword) {
+      setConfirmPasswordError('')
+    }
     try {
       await axios.post('/api/users',inputs, {
         withCredentials: true
@@ -37,7 +51,14 @@ const SignUp = () => {
       navigate('/');
     }
     catch(e: any) { 
-      console.log(e.response.data.message);
+      const error : ValidationError = e.response.data
+      console.log(error.path); 
+      if (error.path === 'username')
+        setUsernameError(error.msg);
+      else if (error.path === 'email')
+        setEmailError(error.msg);
+      else if (error.path === 'password')
+        setPasswordError(error.msg);
       setIsLoading(false);
     }
   }
@@ -53,25 +74,41 @@ const SignUp = () => {
           onChange={(e) => setInputs({...inputs, username: e.target.value})}
           placeholder="Username" 
           type="text" 
+          required
           />
+          {
+            usernameError ? <p className="error">{usernameError}</p> : null
+          }
           <input 
           value={inputs.email}
           onChange={(e) => setInputs({...inputs, email: e.target.value})}
           placeholder="Email" 
-          type="text" 
+          type="email" 
+          required
           />
+          {
+            emailError ? <p className="error">{emailError}</p> : null
+          }
         <input
           value={inputs.password}
           onChange={(e) => setInputs({...inputs, password: e.target.value})}
           placeholder="Password" 
           type="password" 
-        />
+          required
+          />
+          {
+            passwordError ? <p className="error">{passwordError}</p> : null
+          }
         <input
           value={inputs.confirmPassword}
           onChange={(e) => setInputs({...inputs, confirmPassword: e.target.value})}
           placeholder="Confirm Password" 
           type="password" 
-        />
+          required
+          />
+          {
+            confirmPasswordError ? <p className="error">{confirmPasswordError}</p> : null
+          }
         {
           !isLoading ?
           <button type="submit" className="login-button">
@@ -105,4 +142,4 @@ const SignUp = () => {
   )
 }
 
-export default SignUp
+export default SignUp;

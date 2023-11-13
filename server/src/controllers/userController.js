@@ -51,12 +51,19 @@ const registerUser = asyncHandler(async (req, res) => {
   
   if (findUserName) {
     res.status(400);
-    throw new Error('username already in use.');
+    res.json({
+      path: 'username',
+      msg:'username already exist'
+    });
+    return ;
   }
   
   if (findUserEmail) {
-    res.status(400);
-    throw new Error('email already in use.');
+    res.json({
+      path: 'username',
+      msg:'email already exist'
+    });
+    return ;
   }
   
   const user = await User.create({
