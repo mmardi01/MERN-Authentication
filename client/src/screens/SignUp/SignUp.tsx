@@ -2,6 +2,8 @@ import React, { FormEvent, useState } from 'react'
 import { ReactSVG } from 'react-svg'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { setCredentials } from '../../redux/authSlice';
+
 
 interface SignUpInputs {
   username:string;
@@ -38,21 +40,24 @@ const SignUp = () => {
     setIsLoading(true);
     setUsernameError('');
     setEmailError('');
-    setPasswordError('')
+    setPasswordError('');
+    setConfirmPasswordError('')
     if (inputs.password !== inputs.confirmPassword) {
-      setConfirmPasswordError('')
+      setConfirmPasswordError('Passwords does not match');
+      setIsLoading(false);
+      return ;
     }
     try {
-      await axios.post('/api/users',inputs, {
+      const res = await axios.post('/api/users',inputs, {
         withCredentials: true
       }
       );
       setIsLoading(false);
+      dispatch(setCredentials(res.data));
       navigate('/');
     }
     catch(e: any) { 
       const error : ValidationError = e.response.data
-      console.log(error.path); 
       if (error.path === 'username')
         setUsernameError(error.msg);
       else if (error.path === 'email')
@@ -143,3 +148,7 @@ const SignUp = () => {
 }
 
 export default SignUp;
+
+function dispatch(arg0: any) {
+  throw new Error('Function not implemented.');
+}

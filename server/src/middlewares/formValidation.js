@@ -18,9 +18,9 @@ const signUpErrorHandler = (req, res, next) => {
   if (errors.length) {
     res.status(400);
     res.json(errors[0]);
-    return ;
+    return;
   }
-  next()
+  next();
 }
 
 const signInValidation = [
@@ -38,21 +38,21 @@ const signInValidation = [
 const signUpValidation = [
   check('username')
   .notEmpty()
-  .withMessage('username cannot be empty')
+  .withMessage('Username cannot be empty')
   .isAlphanumeric()
-  .withMessage('invalid  username')
+  .withMessage('Invalid  username')
   .trim()
   .isLength({
     min:4
-  }).withMessage('username must have at least 4 charcters'),
+  }).withMessage('Username must have at least 4 charcters'),
   check('email')
   .isEmail()
-  .withMessage('invalid email')
+  .withMessage('Invalid email')
   .notEmpty(),
   check('password')
   .isLength({
     min:8
-  }).withMessage('password must have at least 8 characters'),
+  }).withMessage('Password must have at least 8 characters'),
   signUpErrorHandler
 ]
 

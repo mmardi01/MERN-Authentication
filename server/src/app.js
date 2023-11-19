@@ -17,7 +17,7 @@ app.use(cors({
 }));
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser())
-app.use('/api/users',userRouter);
+app.use('/api/users', userRouter);
 
 app.use(notFound);
 app.use(errorHandler);

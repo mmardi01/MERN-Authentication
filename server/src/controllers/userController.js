@@ -3,7 +3,6 @@ import { User } from '../models/userModel.js';
 import { generateAccessToken } from '../utils/generateToken.js';
 import bcrypt from 'bcryptjs';
 
-
 // @desc Auth user/set token
 // route POST /api/users/auth
 // @access Public
@@ -63,7 +62,7 @@ const registerUser = asyncHandler(async (req, res) => {
       path: 'username',
       msg:'email already exist'
     });
-    return ;
+    return;
   }
   
   const user = await User.create({
