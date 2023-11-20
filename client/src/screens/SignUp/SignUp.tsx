@@ -3,7 +3,7 @@ import { ReactSVG } from 'react-svg'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { setCredentials } from '../../redux/authSlice';
-
+import { useAppDispatch } from '../../redux/hooks';
 
 interface SignUpInputs {
   username:string;
@@ -29,7 +29,7 @@ const SignUp = () => {
   const [ emailError, setEmailError ] =  useState('');
   const [ passwordError, setPasswordError ] =  useState('');
   const [ confirmPasswordError, setConfirmPasswordError ] =  useState('');
-
+  const dispatch = useAppDispatch();
   const [isLoading,setIsLoading] = useState(false);
   
   const navigate = useNavigate();
@@ -54,9 +54,11 @@ const SignUp = () => {
       );
       setIsLoading(false);
       dispatch(setCredentials(res.data));
+      console.log(res.data);
       navigate('/');
     }
     catch(e: any) { 
+      console.log(e);
       const error : ValidationError = e.response.data
       if (error.path === 'username')
         setUsernameError(error.msg);
@@ -149,6 +151,4 @@ const SignUp = () => {
 
 export default SignUp;
 
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}
+
