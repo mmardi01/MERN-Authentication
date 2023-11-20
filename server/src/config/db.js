@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config();
-const connectionString = 'mongodb://admin:1234@localhost:27017/?authMechanism=DEFAULT'
+const connectionString = process.env.CONNECTION_STRING
 
 const connectDb = async () => {
     try {   
@@ -11,8 +11,8 @@ const connectDb = async () => {
         console.log(`Db connected seccussfully`);
     }
     catch (err) {
-        console.log(err)
-        process.exit(1);
+        // process.exit(1);
+        console.log(err);
     }
 }
 
